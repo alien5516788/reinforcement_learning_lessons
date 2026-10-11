@@ -15,10 +15,10 @@ impl Environment {
     }
 }
 
-// Episodic Step
+// Episode step
 struct Step {
     state: State, // Current state
-    reward: f32,  // Reward for leaving current state
+    reward: f32,  // Reward recieved from next state
 }
 
 
@@ -41,7 +41,10 @@ fn value(s: &State, v_table: &HashMap<State, f32>) -> f32 {
 }
 
 // Alpha (α)
-const ALPHA: f32 = 0.9;
+/*
+ * Learning rate
+ */
+const ALPHA: f32 = 0.1;
 
 
 

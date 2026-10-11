@@ -40,6 +40,9 @@ fn reward(_s: &State, _a: &Action, _s_next: &State) -> f32 {
 }
 
 // 5. Gamma (γ)
+/*
+ * Discount factor
+ */
 const GAMMA: f32 = 0.9;
 
 
