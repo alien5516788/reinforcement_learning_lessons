@@ -1,8 +1,0 @@
-[package]
-name = "n1_dynamic_programming"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-snake = {path = "../snake"}
-rand = "0.10.3"

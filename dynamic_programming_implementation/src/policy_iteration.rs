@@ -32,7 +32,8 @@ pub fn policy(s: &State, a: &Action, pi_table: &mut HashMap<(State, Action), f32
  *
  *     Q(s, a) = Σ_s' P(s' | s, a) * [R(s, a, s') + γV(s')]
  *     a* = argmax_a Q(s, a)
- *     π(a | s) <- 1 if a == a*, 0 otherwise
+ *     π(a | s) <- 1 if a == a*; 0 otherwise                    // greedy/deterministic
+ *     π(a | s) <- 0.9 if a == a*; 0.1 * (1 / n - 1) otherwise  // stochastic
  */
 fn policy_iteration(
     states: &Vec<State>,
@@ -70,8 +71,7 @@ fn policy_iteration(
                 let future_value = value(s_next, v_table);
 
                 // Q(s, a) = P(s' | s, a) * [R(s, a, s') + γV(s')]
-                action_value += transition_probability
-                    * (immediate_reward + (GAMMA * future_value));
+                action_value += transition_probability * (immediate_reward + (GAMMA * future_value));
             }
 
             // a* <- arg_max_a Q(s, a)
@@ -113,7 +113,7 @@ pub fn value(s: &State, v_table: &HashMap<State, f32>) -> f32 {
 
 
 /*
- * Value is learnet by continuously interacting with the world_model
+ * Value is learnt by continuously interacting with the world_model
  *
  *     V(s) <- Σ_a π(a | s) Σ_s' P(s' | s, a) * [R(s, a, s') + γV(s')]
  */
@@ -148,9 +148,7 @@ pub fn policy_evaluation(
                     .unwrap();
 
                 // V(s) <- π(a | s) * P(s' | s, a) * [R(s, a, s') + γV(s')]
-                v += action_probability
-                    * transition_probability
-                    * (immediate_reward + (GAMMA * future_value));
+                v += action_probability * transition_probability * (immediate_reward + (GAMMA * future_value));
             }
         }
 

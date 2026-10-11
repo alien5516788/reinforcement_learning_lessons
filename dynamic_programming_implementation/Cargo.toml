@@ -1,5 +1,5 @@
 [package]
-name = "n2_monte_carlo_learning"
+name = "dynamic_programming_implementation"
 version = "0.1.0"
 edition = "2024"
 

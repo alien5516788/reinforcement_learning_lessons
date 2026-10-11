@@ -56,8 +56,7 @@ pub fn value_iteration(
                 let future_value = value(s_next, v_table);
 
                 // Add the next state contribution to Q(s, a)
-                action_value += transition_probability
-                    * (immediate_reward + (GAMMA * future_value));
+                action_value += transition_probability * (immediate_reward + (GAMMA * future_value));
             }
 
             // V(s) <- max_a Q(s, a)

@@ -67,9 +67,7 @@ pub fn policy_evaluation(
                     .unwrap();
 
                 // V(s) <- π(a | s) * P(s' | s, a) * [R(s, a, s') + γV(s')]
-                v += action_probability
-                    * transition_probability
-                    * (immediate_reward + (GAMMA * future_value));
+                v += action_probability * transition_probability * (immediate_reward + (GAMMA * future_value));
             }
         }
 
