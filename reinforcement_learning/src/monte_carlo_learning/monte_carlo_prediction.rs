@@ -10,17 +10,15 @@ use crate::{State, Action, GAMMA};
 struct Environment;
 
 impl Environment {
-    pub fn step(_s: &State, _a: &Action) -> Step {
-        Step {
-            next_state: State,
-            reward: -1.0,
-        }
+    pub fn step(_s: &State, _a: &Action) -> (State, f32) {
+        (State, -1.0)
     }
 }
 
+// Episodic Step
 struct Step {
-    next_state: State,
-    reward: f32,
+    state: State, // Current state
+    reward: f32,  // Reward for leaving current state
 }
 
 
@@ -43,34 +41,38 @@ fn value(s: &State, v_table: &HashMap<State, f32>) -> f32 {
 }
 
 // Alpha (α)
-/*
- *
- */
 const ALPHA: f32 = 0.9;
 
 
 
 /*
- * V(s') <- V(s') + α[G(s') - V(s')]
+ * Value is learnt by calculating discounted return backward from the end of the episode
+ *   then updating the value of each step state using the return
+ *
+ *   G_t = R_t+1 + γG_t+1
+ *   V(s_t) <- V(s_t) + α[G_t - V(s_t)]
  */
-fn monte_carlo_learning(
+fn monte_carlo_prediction (
     episode: Vec<Step>,
     v_table: &mut HashMap<State, f32>,
 ) {
-    // Calculate returns and update V backwards.
+    // g
     let mut g = 0.0;
 
+    // We start as t+1 = terminal step which is not included in the episode
+    //   and t = last step in the episode
     for step in episode.iter().rev() {
-        // G(s') = R(s') + γG(s')
+        // G_t = R_t+1 + γG_t+1
         g = step.reward + GAMMA * g;
 
-        // V(s')
-        let old_value = value(&step.next_state, v_table);
+        // V(s_t)
+        let mut v = value(&step.state, v_table);
 
-        // V(s') <- V(s') + α[G(s') - V(s')]
-        let new_value = old_value + ALPHA * (g - old_value);
+        // v
+        v = v + ALPHA * (g - v);
 
-        v_table.insert(step.next_state.clone(), new_value);
+        // V(s_t) <- V(s_t) + α[G_t - V(s_t)]
+        v_table.insert(step.state.clone(), v);
     }
 }
 
@@ -92,6 +94,9 @@ pub fn run() {
     // Train
     for initial_s in &states {
         for terminal_s in &states {
+            // In reality initial state and terminal state depends on the environment
+            // All possible initial and terminal states may not be explored
+
             for _ in 0..50 {
                 // Generate one complete episode
                 let mut episode: Vec<Step> = Vec::new();
@@ -101,12 +106,11 @@ pub fn run() {
                     let a = action(&s, &actions); // a
 
                     // E(s, a) -> (s', r)
-                    let Step {next_state: s_next, reward: r} = Environment::step(&s, &a);
+                    let (s_next, r) = Environment::step(&s, &a);
 
-                    // Record the observed state and reward.
                     episode.push(
                         Step {
-                            next_state: s_next.clone(),
+                            state: s,
                             reward: r,
                         }
                     );
@@ -115,7 +119,7 @@ pub fn run() {
                 }
 
                 //  Learn from the episode
-                monte_carlo_learning(episode, &mut v_table)
+                monte_carlo_prediction(episode, &mut v_table)
             }
         }
     }
