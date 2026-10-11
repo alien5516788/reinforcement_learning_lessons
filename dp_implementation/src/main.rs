@@ -5,6 +5,6 @@ pub mod value_iteration;
 
 fn main() {
     // policy_evaluation::run();
-    policy_iteration::run();
-    // value_iteration::run()
+    // policy_iteration::run();
+    value_iteration::run()
 }

@@ -1,5 +1,4 @@
 pub mod mdp;
-pub mod board;
 
 /*
  * Snake game

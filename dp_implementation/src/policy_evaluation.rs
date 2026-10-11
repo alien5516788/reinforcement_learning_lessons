@@ -1,7 +1,19 @@
 use std::collections::HashMap;
 
-use snake::{HEIGHT, WIDTH};
-use snake::mdp::{State, Action, world_model, reward, GAMMA};
+use crate::snake::{HEIGHT, WIDTH};
+use crate::snake::mdp::{State, Action, world_model, reward, GAMMA};
+
+
+// Policy (π) - defined
+fn policy(_s: &State, a: &Action) -> f32 {
+    match a {
+        Action::Up => 0.15,
+        Action::Down => 0.15,
+        Action::Left => 0.15,
+        Action::Right => 0.15,
+        Action::Eat => 0.4,
+    }
+}
 
 
 // Value (V) - learnt
@@ -20,15 +32,12 @@ pub fn value(s: &State, v_table: &HashMap<State, f32>) -> f32 {
 }
 
 
-// Value iteration
 /*
- * Value is learnt by continuously improving the value of each state
- * by choosing the action with the highest expected return.
+ * Value is learnet by continuously interacting with the world_model
  *
- *     Q(s, a) = Σ_s' P(s' | s, a) * [R(s, a, s') + γV(s')]
- *     V(s) <- max_a Q(s, a)
+ *     V(s) <- Σ_a π(a | s) Σ_s' P(s' | s, a) * [R(s, a, s') + γV(s')]
  */
-pub fn value_iteration(
+pub fn policy_evaluation(
     states: &Vec<State>,
     actions: &Vec<Action>,
     v_table: &mut HashMap<State, f32>
@@ -37,15 +46,15 @@ pub fn value_iteration(
 
     for s in states {
         // V(s)
-        let mut v = f32::NEG_INFINITY; // max_a Q(s, a)
+        let mut v = 0.0;
 
+        // Σ_a
         for a in actions {
-            // Q(s, a)
-            let mut action_value = 0.0;
+            // π(a | s)
+            let action_probability = policy(s, a);
 
             // Σ_s'
             for s_next in states {
-
                 // P(s' | s, a)
                 let transition_probability = world_model(s, a, s_next);
 
@@ -53,15 +62,12 @@ pub fn value_iteration(
                 let immediate_reward = reward(s, a, s_next);
 
                 // V(s')
-                let future_value = value(s_next, v_table);
+                let future_value = v_table
+                    .get(s_next)
+                    .unwrap();
 
-                // Add the next state contribution to Q(s, a)
-                action_value += transition_probability * (immediate_reward + (GAMMA * future_value));
-            }
-
-            // V(s) <- max_a Q(s, a)
-            if action_value > v {
-                v = action_value; // max_a Q(s, a)
+                // V(s) <- π(a | s) * P(s' | s, a) * [R(s, a, s') + γV(s')]
+                v += action_probability * transition_probability * (immediate_reward + (GAMMA * future_value));
             }
         }
 
@@ -78,14 +84,14 @@ pub fn run() {
     let mut v_table = v_table(&states);
 
     println!("\nInitial table");
-    print_v_table(&v_table, (3, 0));
+    print_v_table(&v_table, (0, 0));
 
     // Train
     for i in 0..50 {
-        value_iteration(&states, &actions, &mut v_table);
+        policy_evaluation(&states, &actions, &mut v_table);
 
         println!("\nIteration {}", i + 1);
-        print_v_table(&v_table, (3, 0));
+        print_v_table(&v_table, (0, 0));
     }
 
     // Test

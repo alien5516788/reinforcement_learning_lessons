@@ -1,3 +1,3 @@
 [workspace]
 resolver = "3"
-members = ["regression", "reinforcement_learning", "dynamic_programming_implementation"]
+members = ["regression", "reinforcement_learning", "dp_implementation"]

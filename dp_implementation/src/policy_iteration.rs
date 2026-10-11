@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use snake::{HEIGHT, WIDTH};
-use snake::mdp::{State, Action, world_model, reward, GAMMA};
+use crate::snake::{HEIGHT, WIDTH};
+use crate::snake::mdp::{State, Action, world_model, reward, GAMMA};
 
 
 // Policy (π) - learnt

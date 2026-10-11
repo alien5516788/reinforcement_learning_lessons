@@ -1,5 +1,5 @@
 [package]
-name = "dynamic_programming_implementation"
+name = "dp_implementation"
 version = "0.1.0"
 edition = "2024"
 
