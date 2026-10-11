@@ -63,11 +63,15 @@ const GAMMA: f32 = 0.9;
 fn main() {
     /*
      *   - Dynamic Programming (DP)
+     *     - Policy Evaluation
+     *     - Policy Iteration
+     *     - Value Iteration
      *   - Monte Carlo Learning (MCL)
+     *     - Monte Carlo Prediction
+     *     - Monte Carlo Control
      *   - Temporal Dfference Learning (TD)
-     *   - SARSA
-     *   - Q-learning
-     *   - DQN
+     *     - SARSA
+     *     - Q-learning
      */
     println!("Reinforcement Learning")
 }
