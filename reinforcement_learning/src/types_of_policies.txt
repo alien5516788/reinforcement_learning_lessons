@@ -1,0 +1,25 @@
+Stochastic Policy
+    - Outputs a probability
+
+      π(a | s)
+
+ε-greedy Policy
+    - Special type of stochastic policy
+    - It assigns highest probability to best action and devide remaining ε probability to among of the actions
+
+      π(s, a) -> {
+                    1 - ε + (ε / |A(s)|) ,  if a == arg max_a Q(s, a)
+                    ε / |A(s)| ,            if a != arg max_a Q(s, a)
+                 }
+
+Deterministic Policy
+    - Outputs an action
+    - Each state has only one possible action with probability of 1
+
+      μ(s) or π(s)
+
+Greedy Policy
+    - Special type of deterministic policy
+    - Always chooses the best action
+
+      π(s) -> arg max_a Q(s, a)

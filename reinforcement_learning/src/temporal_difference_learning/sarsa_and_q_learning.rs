@@ -2,15 +2,21 @@
 // It depends on the specific TD implementation
 
 /*
- * SARSA (S -> A -> R -> S -> A)
- *   - SARSA calculate the next value based on the action selected using policy
+ * SARSA (On-Policy, Model-Free)
+ *   - S -> A -> R -> S -> A
+ *   - SARSA calculate the next value based on the action selected using policy (On-Policy)
  *
- *     a' = action(s', A)
- *     next_value = Q(s', a')
+ *       Q_π(s, a) <- Q_π(s, a) + α[R + γQ_π(s', a') - Q_π(s, a)]
  *
- * Q-Learning
- *   - Q-Learning calculates the next value using highest Q-value
- *     among all available actions for the next state
+ * Expected-SARSA (On-Policy, Model-Free)
+ *   - Special type of SARSA
+ *   - It sums over all possible next actions multiplied by policy
  *
- *       next_value = max_a Q(s', a')
+ *       Q_π(s, a) <- Q_π(s, a) + α[R + γ * Σ_a' π(a' | s') Q_π(s', a') - Q_π(s, a)]
+ *
+ * Q-Learning (Off-Policy, Model-Free)
+ *   - Q-Learning calculates the next value using highest Q-value among all available actions for the next state
+ *
+ *       Q(s, a) <- Q(s, a) + α[R + γ max_a' Q(s', a') - Q(s, a)]
+ *
  */

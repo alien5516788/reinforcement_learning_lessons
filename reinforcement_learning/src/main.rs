@@ -46,12 +46,19 @@ fn reward(_s: &State, _a: &Action, _s_next: &State) -> f32 {
  */
 const GAMMA: f32 = 0.9;
 
+// 3, 4. Joint World Model
+/*
+ * P(s', r | s, a)
+ */
+fn _world_model(_s: &State, _a: &Action, _s_next: &State, _r: f32) -> f32 {
+    0.5
+}
 
 // Bellman Equation
 /*
  * Bellman equation define the fundamental learning flow using MDP
  *
- *   V(s) <- R(s') + γV(s')
+ *   V_π(s) <- Eπ[R_t+1 + γV_π(S_t+1) | S_t = s]
  *
  *   This can be defined as recusive if it's calculated repeatedly on next state
  *   But most of the time V(s') the existing entry of a table or an nn
@@ -72,6 +79,7 @@ fn main() {
      *   - Temporal Dfference Learning (TD)
      *     - SARSA
      *     - Q-learning
+     *   - Policy Gradient: TODO
      */
     println!("Reinforcement Learning")
 }

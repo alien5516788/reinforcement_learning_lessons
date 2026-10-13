@@ -44,6 +44,7 @@ const ALPHA: f32 = 0.1;
 /*
  * TD Update
  * Q-values are updated from individual transitions.
+ *   Q(s, a) <- Q(s, a) + α[R + γQ(s', a') - Q(s, a)]
  *
  * TD target
  *   target = R + γQ(s', a')
@@ -111,7 +112,7 @@ pub fn run() {
 
                     // This value must be taken from Q table
                     // Out of all possible actions one of the (s, a) pair must be selected
-                    // That part is handled in specific TD algorithm like SARSA or Q-learning
+                    // That part is handled in specific TD algorithm like SARSA, Expected SARSA or Q-learning
                     let next_value = 0.0;
 
                     // TD update
